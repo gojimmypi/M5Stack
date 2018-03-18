@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 // 23FEB18 gojimmypi reversed LORA_DEFAULT_RESET_PIN and LORA_DEFAULT_DIO0_PIN pin numbers
-// reset on pin 36; irq on pin 26
+// reset on pin 36; irq on pin 26 
 
 #ifndef M5LORA_H
 #define M5LORA_H
@@ -67,6 +67,7 @@ public:
   void setSPIFrequency(uint32_t frequency);
 
   void dumpRegisters(Stream& out);
+  uint8_t readRegister(uint8_t address);
 
 private:
   void explicitHeaderMode();
@@ -74,7 +75,7 @@ private:
 
   void handleDio0Rise();
 
-  uint8_t readRegister(uint8_t address);
+//  uint8_t readRegister(uint8_t address);
   void writeRegister(uint8_t address, uint8_t value);
   uint8_t singleTransfer(uint8_t address, uint8_t value);
 

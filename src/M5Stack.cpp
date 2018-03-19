@@ -3,8 +3,14 @@
 
 #include "M5Stack.h"
 
+
 void M5Stack::begin() {
-    
+	begin(true);
+}
+
+void M5Stack::begin(bool useSpeaker = true) {
+    SpeakerEnabled = useSpeaker;
+
     // UART 
     Serial.begin(115200);
     Serial.flush();
@@ -15,8 +21,9 @@ void M5Stack::begin() {
     digitalWrite(SDA, 1);
 
     // TONE
-    Speaker.begin();
-
+	if (SpeakerEnabled) {
+      Speaker.begin();
+    }
     // Setup the button with an internal pull-up
     pinMode(BUTTON_A_PIN, INPUT_PULLUP);
     pinMode(BUTTON_B_PIN, INPUT_PULLUP);
@@ -51,8 +58,10 @@ void M5Stack::update() {
     BtnB.read();
     BtnC.read();
 
-    //Speaker update
-    Speaker.update();
+    // Speaker update
+	if (SpeakerEnabled) {
+		Speaker.update();
+	}
 }
 
 void M5Stack::startupLogo() {
@@ -61,7 +70,9 @@ void M5Stack::startupLogo() {
     Lcd.setBrightness(0);
     Lcd.drawBitmap(0, 0, 320, 240, (uint16_t *)gImage_logoM5);
     for(int i=0; i<length; i++) {
-        dacWrite(SPEAKER_PIN, m5stack_startup_music[i]>>2);
+		if (SpeakerEnabled) {
+	        dacWrite(SPEAKER_PIN, m5stack_startup_music[i]>>2);
+		}
         delayMicroseconds(40);
         brightness = (i/157);
         if(pre_brightness != brightness) {
@@ -72,9 +83,11 @@ void M5Stack::startupLogo() {
 
     for(int i=255; i>=0; i--) {
         lcd.setBrightness(i);
-        if(i<=32) {
-            dacWrite(SPEAKER_PIN, i);
-        }
+		if (SpeakerEnabled) {
+			if(i<=32) {
+				dacWrite(SPEAKER_PIN, i);
+			}
+		}
         delay(2);
     }
 

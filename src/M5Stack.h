@@ -114,6 +114,7 @@ class M5Stack {
 
  public:
     void begin();
+    void begin(bool useSpeaker);
     void update();
     void startupLogo();
 
@@ -143,6 +144,7 @@ class M5Stack {
 
  private:
     uint8_t _wakeupPin;
+    bool SpeakerEnabled = true;
 };
 
 extern M5Stack M5;
